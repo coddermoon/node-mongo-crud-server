@@ -9,7 +9,7 @@
     "mongodb": "^4.13.0"
   },
   "scripts": {
-    "start-dev":"nodemon index",
+    "start-dev": "nodemon index",
     "start": "node index.js"
   }
 }

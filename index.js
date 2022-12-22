@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const port = process.env.PORT || 5000;
 
@@ -30,6 +30,36 @@ const run = async() => {
             const result = await serviceCollection.find(query).toArray()
             res.send(result);
         })
+
+        app.delete('/upload/:id', async (req, res) => {
+            const id = req.params.id;
+            
+            const query = { _id: ObjectId(id) };
+            const result = await serviceCollection.deleteOne(query)
+            res.send(result)
+           
+        })
+
+        // update data
+        app.put('/upload/:id',async(req,res)=>{
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const service = req.body;
+            const option = {upsert: true};
+            const updateReview = {
+                $set: {
+                    name: service.name,
+                    service: service.service,
+                   
+                }
+                
+            }
+            const result = await serviceCollection.updateOne(filter, updateReview, option);
+            res.send(result)
+        
+        })
+        
+        
 
 
     }finally{
